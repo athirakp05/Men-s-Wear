@@ -18,4 +18,5 @@ urlpatterns = [
     path('cart/update/', views.CartViewSet.as_view({'patch': 'update_item'}), name='cart-update'),
     path('cart/remove/', views.CartViewSet.as_view({'delete': 'remove_item'}), name='cart-remove'),
     path('cart/clear/', views.CartViewSet.as_view({'delete': 'clear'}), name='cart-clear'),
+    
 ]

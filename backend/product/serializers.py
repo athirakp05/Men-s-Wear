@@ -5,7 +5,7 @@ from .models import Category, Product, Cart, CartItem, Order, OrderItem
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -27,24 +27,27 @@ class RegisterSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'created_at']
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='category.name', read_only=True)
+    category = CategorySerializer(read_only=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(),
+        source='category',
+        write_only=True
+    )
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'description', 'price', 'category', 'category_name', 
-                  'image_url', 'stock', 'size', 'brand', 'is_featured', 'created_at', 'updated_at']
+        fields = '__all__'
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
-    product_id = serializers.IntegerField(write_only=True)
     subtotal = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
 
     class Meta:
         model = CartItem
-        fields = ['id', 'product', 'product_id', 'quantity', 'subtotal', 'added_at']
+        fields = ['id', 'product', 'quantity', 'subtotal', 'added_at']
 
 class CartSerializer(serializers.ModelSerializer):
     items = CartItemSerializer(many=True, read_only=True)
@@ -55,22 +58,21 @@ class CartSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'items', 'total_price', 'created_at', 'updated_at']
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product_name = serializers.CharField(source='product.name', read_only=True)
-    product_image = serializers.URLField(source='product.image_url', read_only=True)
+    product = ProductSerializer(read_only=True)
     subtotal = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
 
     class Meta:
         model = OrderItem
-        fields = ['id', 'product', 'product_name', 'product_image', 'quantity', 'price', 'subtotal']
+        fields = ['id', 'product', 'quantity', 'price', 'subtotal']
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
-    user_name = serializers.CharField(source='user.username', read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'user_name', 'total_amount', 'status', 'shipping_address', 
-                  'phone_number', 'items', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'items', 'total_amount', 'status', 
+                  'shipping_address', 'phone_number', 'created_at', 'updated_at']
 
 class CreateOrderSerializer(serializers.Serializer):
     shipping_address = serializers.CharField()

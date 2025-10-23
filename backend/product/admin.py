@@ -8,30 +8,24 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'price', 'stock', 'size', 'brand', 'is_featured', 'created_at']
-    list_filter = ['category', 'is_featured', 'size', 'brand']
+    list_display = ['name', 'category', 'price', 'stock', 'is_featured', 'created_at']
+    list_filter = ['category', 'is_featured', 'size']
     search_fields = ['name', 'brand']
-    list_editable = ['price', 'stock', 'is_featured']
-
-class CartItemInline(admin.TabularInline):
-    model = CartItem
-    extra = 0
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['user', 'created_at', 'updated_at']
-    inlines = [CartItemInline]
+    list_display = ['user', 'created_at']
 
-class OrderItemInline(admin.TabularInline):
-    model = OrderItem
-    extra = 0
-    readonly_fields = ['product', 'quantity', 'price']
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['cart', 'product', 'quantity']
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'total_amount', 'status', 'created_at']
+    list_display = ['id', 'user', 'status', 'total_amount', 'created_at']
     list_filter = ['status', 'created_at']
-    search_fields = ['user__username', 'phone_number']
-    list_editable = ['status']
-    inlines = [OrderItemInline]
-    readonly_fields = ['total_amount', 'created_at', 'updated_at']
+    search_fields = ['user__username']
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['order', 'product', 'quantity', 'price']
