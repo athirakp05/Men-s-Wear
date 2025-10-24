@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { adminProductService, adminCategoryService } from '../../api/admin/adminServices';
+import { adminProductService, adminCategoryService } from '../../api/adminServices';
 
 const ProductForm = () => {
   const { id } = useParams();
@@ -25,9 +25,24 @@ const ProductForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch categories
         const catResponse = await adminCategoryService.getAll();
-        setCategories(catResponse.data);
+        console.log('Categories response:', catResponse.data); // Debug log
+        
+        // Handle different response formats
+        let categoriesData = [];
+        if (Array.isArray(catResponse.data)) {
+          categoriesData = catResponse.data;
+        } else if (catResponse.data.results) {
+          categoriesData = catResponse.data.results;
+        } else if (catResponse.data.categories) {
+          categoriesData = catResponse.data.categories;
+        }
+        
+        setCategories(categoriesData);
+        console.log('Set categories:', categoriesData); // Debug log
 
+        // If editing, fetch product data
         if (isEditMode) {
           const prodResponse = await adminProductService.getById(id);
           const product = prodResponse.data;
@@ -45,7 +60,8 @@ const ProductForm = () => {
         }
       } catch (error) {
         console.error('Error fetching data:', error);
-        alert('Failed to load data');
+        alert('Failed to load data: ' + error.message);
+        setCategories([]);
       }
     };
 
@@ -59,34 +75,52 @@ const ProductForm = () => {
       [name]: type === 'checkbox' ? checked : value,
     });
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  if (!formData.category) {
+    alert('Please select a category');
+    return;
+  }
+  
+  setLoading(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  try {
+    const data = {
+      name: formData.name,
+      description: formData.description,
+      price: parseFloat(formData.price),
+      stock: parseInt(formData.stock),
+      category_id: parseInt(formData.category), // Changed from 'category' to 'category_id'
+      image_url: formData.image_url,
+      size: formData.size,
+      brand: formData.brand,
+      is_featured: formData.is_featured,
+    };
 
-    try {
-      const data = {
-        ...formData,
-        price: parseFloat(formData.price),
-        stock: parseInt(formData.stock),
-      };
+    console.log('Submitting data:', data); // Debug log
 
-      if (isEditMode) {
-        await adminProductService.update(id, data);
-        alert('Product updated successfully');
-      } else {
-        await adminProductService.create(data);
-        alert('Product created successfully');
-      }
-      navigate('/admin/products');
-    } catch (error) {
-      console.error('Error saving product:', error);
-      alert(error.response?.data?.error || 'Failed to save product');
-    } finally {
-      setLoading(false);
+    if (isEditMode) {
+      await adminProductService.update(id, data);
+      alert('Product updated successfully');
+    } else {
+      await adminProductService.create(data);
+      alert('Product created successfully');
     }
-  };
-
+    navigate('/admin/products');
+  } catch (error) {
+    console.error('Error saving product:', error);
+    console.error('Error response:', error.response?.data); // Debug log
+    
+    const errorMsg = error.response?.data?.category_id?.[0] || 
+                     error.response?.data?.error || 
+                     JSON.stringify(error.response?.data) ||
+                     'Failed to save product';
+    alert(errorMsg);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -154,7 +188,7 @@ const ProductForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium text-dark-700 mb-2">
-                  Price ($) *
+                  Price (₹) *
                 </label>
                 <input
                   type="number"
@@ -165,7 +199,7 @@ const ProductForm = () => {
                   min="0"
                   step="0.01"
                   className="input-field"
-                  placeholder="49.99"
+                  placeholder="499.99"
                 />
               </div>
 
@@ -208,7 +242,7 @@ const ProductForm = () => {
 
             <div>
               <label className="block text-sm font-medium text-dark-700 mb-2">
-                Category *
+                Category * {categories.length === 0 && <span className="text-red-500">(No categories found - please add categories first)</span>}
               </label>
               <select
                 name="category"
@@ -218,9 +252,9 @@ const ProductForm = () => {
                 className="input-field"
               >
                 <option value="">Select a category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
                   </option>
                 ))}
               </select>
@@ -237,8 +271,11 @@ const ProductForm = () => {
                 onChange={handleChange}
                 required
                 className="input-field"
-                placeholder="https://example.com/image.jpg"
+                placeholder="https://images.unsplash.com/photo-example"
               />
+              <p className="text-xs text-dark-500 mt-1">
+                Tip: Use Unsplash for free images - https://source.unsplash.com/800x800/?shirt,menswear
+              </p>
               {formData.image_url && (
                 <div className="mt-4">
                   <img
@@ -270,7 +307,7 @@ const ProductForm = () => {
             <div className="flex space-x-4 pt-4">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || categories.length === 0}
                 className="btn-primary flex-1"
               >
                 {loading ? 'Saving...' : isEditMode ? 'Update Product' : 'Create Product'}

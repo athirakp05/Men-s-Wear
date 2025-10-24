@@ -8,7 +8,7 @@ import {
   adminProductService, 
   adminOrderService, 
   adminUserService 
-} from '../../api/admin/adminServices';
+} from '../../api/adminServices';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -53,32 +53,33 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-dark-900">Admin Dashboard</h1>
-          <p className="text-dark-600 mt-2">Manage your e-commerce platform</p>
+        {/* Hero Section */}
+        <div className="bg-gradient-to-br from-blue-400 to-dark-900 text-white rounded-2xl p-8 mb-8">
+          <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
+          <p className="text-blue-100">Manage your e-commerce platform</p>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Total Revenue */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-green-100 rounded-lg">
-                <DollarSign className="w-6 h-6 text-green-600" />
+              <div className="p-3 bg-gradient-to-br from-green-400 to-green-600 rounded-lg">
+                <DollarSign className="w-6 h-6 text-white" />
               </div>
               <TrendingUp className="w-5 h-5 text-green-600" />
             </div>
             <h3 className="text-2xl font-bold text-dark-900">
-              ${stats.orders?.total_revenue?.toFixed(2) || '0.00'}
+              ₹{stats.orders?.total_revenue?.toFixed(2) || '0.00'}
             </h3>
             <p className="text-dark-600 text-sm mt-1">Total Revenue</p>
           </div>
 
           {/* Total Orders */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <ShoppingCart className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg">
+                <ShoppingCart className="w-6 h-6 text-white" />
               </div>
               <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-semibold">
                 {stats.orders?.pending_orders || 0} pending
@@ -91,10 +92,10 @@ const Dashboard = () => {
           </div>
 
           {/* Total Products */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <Package className="w-6 h-6 text-purple-600" />
+              <div className="p-3 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg">
+                <Package className="w-6 h-6 text-white" />
               </div>
               <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-semibold">
                 {stats.products?.low_stock || 0} low
@@ -107,10 +108,10 @@ const Dashboard = () => {
           </div>
 
           {/* Total Users */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-dark-100 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-orange-100 rounded-lg">
-                <Users className="w-6 h-6 text-orange-600" />
+              <div className="p-3 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg">
+                <Users className="w-6 h-6 text-white" />
               </div>
             </div>
             <h3 className="text-2xl font-bold text-dark-900">

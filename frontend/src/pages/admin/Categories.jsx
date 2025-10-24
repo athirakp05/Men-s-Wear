@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit, Trash2 } from 'lucide-react';
-import { adminCategoryService } from '../../api/admin/adminServices';
+import { adminCategoryService } from '../../api/adminServices';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -12,16 +12,18 @@ const AdminCategories = () => {
     description: '',
   });
 
-  const fetchCategories = async () => {
-    try {
-      const response = await adminCategoryService.getAll();
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchCategories = async () => {
+  try {
+    const response = await adminCategoryService.getAll();
+-   setCategories(response.data);
++   setCategories(Array.isArray(response.data) ? response.data : response.data.categories || []);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchCategories();
@@ -87,10 +89,6 @@ const AdminCategories = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-dark-900">Categories</h1>
-            <p className="text-dark-600 mt-2">Manage product categories</p>
-          </div>
           <button
             onClick={() => setShowModal(true)}
             className="btn-primary flex items-center space-x-2"

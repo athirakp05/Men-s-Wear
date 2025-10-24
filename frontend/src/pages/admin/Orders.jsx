@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { adminOrderService } from '../../api/admin/adminServices';
+import { adminOrderService } from '../../api/adminServices';
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -11,9 +11,11 @@ const AdminOrders = () => {
       setLoading(true);
       const params = filter ? { status: filter } : {};
       const response = await adminOrderService.getAll(params);
-      setOrders(response.data);
+      // Ensure orders is always an array
+      setOrders(Array.isArray(response.data) ? response.data : response.data.results || []);
     } catch (error) {
       console.error('Error fetching orders:', error);
+      setOrders([]);
     } finally {
       setLoading(false);
     }

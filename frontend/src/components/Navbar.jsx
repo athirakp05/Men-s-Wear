@@ -35,9 +35,7 @@ const Navbar = () => {
             <Link to="/products" className="text-dark-700 hover:text-dark-900 font-medium transition-colors">
               Shop
             </Link>
-            <Link to="/categories" className="text-dark-700 hover:text-dark-900 font-medium transition-colors">
-              Categories
-            </Link>
+
           </div>
 
           {/* Right side icons */}
@@ -129,13 +127,6 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Shop
-              </Link>
-              <Link
-                to="/categories"
-                className="text-dark-700 hover:text-dark-900 font-medium py-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Categories
               </Link>
               {!isAuthenticated && (
                 <Link

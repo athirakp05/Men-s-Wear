@@ -10,9 +10,11 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const response = await orderService.getAll();
-        setOrders(response.data);
+        // Ensure orders is always an array
+        setOrders(Array.isArray(response.data) ? response.data : response.data.results || []);
       } catch (error) {
         console.error('Error fetching orders:', error);
+        setOrders([]); // Set empty array on error
       } finally {
         setLoading(false);
       }
@@ -77,28 +79,31 @@ const Orders = () => {
         ) : (
           <div className="space-y-6">
             {orders.map((order) => (
-              <div key={order.id} className="card p-6">
+              <div key={order.id} className="bg-white rounded-xl shadow-sm p-6">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
                   <div>
                     <div className="flex items-center space-x-3 mb-2">
                       <h3 className="text-xl font-semibold text-dark-900">
                         Order #{order.id}
                       </h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}
+                      >
                         {order.status.toUpperCase()}
                       </span>
                     </div>
                     <p className="text-sm text-dark-600">
-                      Placed on {new Date(order.created_at).toLocaleDateString('en-US', {
+                      Placed on{' '}
+                      {new Date(order.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
-                        day: 'numeric'
+                        day: 'numeric',
                       })}
                     </p>
                   </div>
                   <div className="mt-4 md:mt-0 text-right">
                     <p className="text-sm text-dark-600">Total Amount</p>
-                    <p className="text-2xl font-bold text-dark-900">${order.total_amount}</p>
+                    <p className="text-2xl font-bold text-dark-900">₹ {order.total_amount}</p>
                   </div>
                 </div>
 
@@ -115,12 +120,10 @@ const Orders = () => {
                         <div className="flex-1">
                           <p className="font-medium text-dark-900">{item.product.name}</p>
                           <p className="text-sm text-dark-600">
-                            Quantity: {item.quantity} × ${item.price}
+                            Quantity: {item.quantity} × ₹ {item.price}
                           </p>
                         </div>
-                        <p className="font-semibold text-dark-900">
-                          ${item.subtotal}
-                        </p>
+                        <p className="font-semibold text-dark-900">₹ {item.subtotal}</p>
                       </div>
                     ))}
                   </div>
@@ -129,15 +132,11 @@ const Orders = () => {
                 <div className="border-t border-dark-100 pt-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-semibold text-dark-700 mb-1">
-                        Shipping Address
-                      </p>
+                      <p className="text-sm font-semibold text-dark-700 mb-1">Shipping Address</p>
                       <p className="text-sm text-dark-600">{order.shipping_address}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-dark-700 mb-1">
-                        Contact Number
-                      </p>
+                      <p className="text-sm font-semibold text-dark-700 mb-1">Contact Number</p>
                       <p className="text-sm text-dark-600">{order.phone_number}</p>
                     </div>
                   </div>

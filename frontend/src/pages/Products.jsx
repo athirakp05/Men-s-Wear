@@ -16,9 +16,11 @@ const Products = () => {
     const fetchCategories = async () => {
       try {
         const response = await categoryService.getAll();
-        setCategories(response.data);
+        // Ensure categories is always an array
+        setCategories(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching categories:', error);
+        setCategories([]);
       }
     };
 
@@ -77,35 +79,6 @@ const Products = () => {
 
             {/* Filter content */}
             <div className={`${showFilters ? 'block' : 'hidden'} lg:block space-y-6`}>
-              <div className="card p-4">
-                <h3 className="font-semibold text-dark-900 mb-4">Categories</h3>
-                <div className="space-y-2">
-                  <button
-                    onClick={() => handleCategoryChange('')}
-                    className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                      selectedCategory === ''
-                        ? 'bg-dark-900 text-white'
-                        : 'text-dark-700 hover:bg-dark-50'
-                    }`}
-                  >
-                    All Products
-                  </button>
-                  {categories.map((category) => (
-                    <button
-                      key={category.id}
-                      onClick={() => handleCategoryChange(category.id.toString())}
-                      className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                        selectedCategory === category.id.toString()
-                          ? 'bg-dark-900 text-white'
-                          : 'text-dark-700 hover:bg-dark-50'
-                      }`}
-                    >
-                      {category.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Size Filter */}
               <div className="card p-4">
                 <h3 className="font-semibold text-dark-900 mb-4">Sizes</h3>

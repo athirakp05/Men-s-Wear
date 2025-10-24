@@ -106,7 +106,7 @@ const ProductDetail = () => {
                 </div>
                 <span className="text-dark-600">(4.5) 120 reviews</span>
               </div>
-              <p className="text-5xl font-bold text-dark-900">${product.price}</p>
+              <p className="text-5xl font-bold text-dark-900">₹ {product.price}</p>
             </div>
 
             <div className="border-t border-b border-dark-200 py-6 space-y-4">
@@ -168,7 +168,7 @@ const ProductDetail = () => {
                 <Truck className="w-6 h-6 text-dark-700" />
                 <div>
                   <p className="font-semibold text-sm">Free Delivery</p>
-                  <p className="text-xs text-dark-500">On orders over $100</p>
+                  <p className="text-xs text-dark-500">On orders over ₹ 100</p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">

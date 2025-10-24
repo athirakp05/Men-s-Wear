@@ -147,7 +147,7 @@ const Checkout = () => {
                       </p>
                     </div>
                     <p className="font-semibold text-dark-900">
-                      ${item.subtotal}
+                      ₹ {item.subtotal}
                     </p>
                   </div>
                 ))}
@@ -156,7 +156,7 @@ const Checkout = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-dark-600">
                   <span>Subtotal</span>
-                  <span className="font-semibold">${cart.total_price}</span>
+                  <span className="font-semibold">₹ {cart.total_price}</span>
                 </div>
                 <div className="flex justify-between text-dark-600">
                   <span>Shipping</span>
@@ -166,7 +166,7 @@ const Checkout = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">Total</span>
                     <span className="text-2xl font-bold text-dark-900">
-                      ${cart.total_price}
+                      ₹ {cart.total_price}
                     </span>
                   </div>
                 </div>

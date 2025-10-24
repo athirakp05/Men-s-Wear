@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Edit, Trash2, Search } from 'lucide-react';
-import { adminProductService } from '../../api/admin/adminServices';
+import { adminProductService } from '../../api/adminServices';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
@@ -139,7 +139,7 @@ const AdminProducts = () => {
                         {product.category.name}
                       </td>
                       <td className="px-6 py-4 font-semibold text-dark-900">
-                        ${product.price}
+                        ₹ {product.price}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${

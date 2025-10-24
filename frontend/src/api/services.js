@@ -23,6 +23,7 @@ export const categoryService = {
 };
 
 // Cart Services
+// Cart Services
 export const cartService = {
   getCart: () => api.get('/cart/'),
   addItem: (data) => api.post('/cart/add_item/', data),

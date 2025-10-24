@@ -17,9 +17,13 @@ const Home = () => {
           categoryService.getAll(),
         ]);
         setFeaturedProducts(productsRes.data.slice(0, 4));
-        setCategories(categoriesRes.data);
+        // Ensure categories is always an array
+        setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        // Set empty arrays on error
+        setFeaturedProducts([]);
+        setCategories([]);
       } finally {
         setLoading(false);
       }
@@ -31,7 +35,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-white">
+      <section className="bg-gradient-to-br from-blue-400 relative text-white to-dark-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
@@ -48,9 +52,6 @@ const Home = () => {
                 <span>Shop Now</span>
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link to="/categories" className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-dark-900 transition-all duration-300">
-                Browse Categories
-              </Link>
             </div>
           </div>
         </div>
@@ -66,7 +67,7 @@ const Home = () => {
                 <Truck className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Free Shipping</h3>
-              <p className="text-dark-600">On orders over $100</p>
+              <p className="text-dark-600">On orders over ₹ 100</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-dark-900 text-white rounded-full mb-4">
@@ -117,27 +118,10 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Categories Preview */}
-      <section className="py-20 bg-dark-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="section-title text-center">Shop by Category</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {categories.map((category) => (
-              <Link
-                key={category.id}
-                to={`/products?category=${category.id}`}
-                className="card p-6 text-center hover:scale-105 transition-transform duration-300"
-              >
-                <h3 className="text-lg font-semibold text-dark-900">{category.name}</h3>
-                <p className="text-sm text-dark-600 mt-1">{category.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+     
 
       {/* CTA Section */}
-      <section className="py-20 bg-dark-900 text-white">
+      <section className="py-20 bg-gradient-to-br from-blue-400 text-white to-dark-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Join the Style Revolution

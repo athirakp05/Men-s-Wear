@@ -25,8 +25,13 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(formData);
+      const response = await login(formData);
+      if (response.user.is_staff){
+        navigate('/admin');
+      }
+      else{
       navigate('/');
+      }
     } catch (error) {
       setError(error.response?.data?.error || 'Invalid credentials');
     } finally {
@@ -35,7 +40,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-br flex from-blue-400 items-center justify-center lg:px-8 min-h-screen px-4 py-12 sm:px-6">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
