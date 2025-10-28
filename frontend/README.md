@@ -184,7 +184,7 @@ Product.objects.create(
     description="Premium cotton white shirt",
     price=49.99,
     category=shirts,
-    brand="STEFFIN",
+    brand="Classic Cuts",
     size="M",
     stock=50,
     is_featured=True,

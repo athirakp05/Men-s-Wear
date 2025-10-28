@@ -23,7 +23,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-dark-900">STEFFIN</div>
+            <div className="text-2xl font-bold text-dark-900">Classic Cuts</div>
             <div className="text-xs text-dark-500 hidden sm:block">MENSWEAR</div>
           </Link>
 

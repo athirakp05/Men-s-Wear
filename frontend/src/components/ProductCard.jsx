@@ -66,7 +66,7 @@ const ProductCard = ({ product }) => {
         
         <div className="flex items-center justify-between mb-3">
           <span className="text-2xl font-bold text-dark-900">
-            ${product.price}
+            ₹{product.price}
           </span>
           <span className="text-sm text-dark-500">Size: {product.size}</span>
         </div>

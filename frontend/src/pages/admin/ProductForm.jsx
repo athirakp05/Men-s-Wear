@@ -165,7 +165,7 @@ const handleSubmit = async (e) => {
                   onChange={handleChange}
                   required
                   className="input-field"
-                  placeholder="e.g., STEFFIN"
+                  placeholder="e.g., Classic Cuts"
                 />
               </div>
             </div>

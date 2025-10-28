@@ -51,7 +51,7 @@ const Register = () => {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-dark-900">Create Account</h2>
-            <p className="text-dark-600 mt-2">Join STEFFIN today</p>
+            <p className="text-dark-600 mt-2">Join Classic Cuts today</p>
           </div>
 
           {error && (
